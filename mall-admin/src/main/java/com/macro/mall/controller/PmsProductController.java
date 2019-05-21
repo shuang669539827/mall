@@ -1,5 +1,6 @@
 package com.macro.mall.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.macro.mall.common.api.CommonPage;
 import com.macro.mall.common.api.CommonResult;
 import com.macro.mall.dto.PmsProductParam;
@@ -7,6 +8,7 @@ import com.macro.mall.dto.PmsProductQueryParam;
 import com.macro.mall.dto.PmsProductResult;
 import com.macro.mall.model.PmsProduct;
 import com.macro.mall.service.PmsProductService;
+import com.macro.mall.util.BankImageUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 /**
@@ -27,6 +30,19 @@ import java.util.List;
 public class PmsProductController {
     @Autowired
     private PmsProductService productService;
+
+
+
+    @ApiOperation("获取融E购图片")
+    @GetMapping("/getbankimages")
+    @ResponseBody
+    public CommonResult getBankImages(@PathParam("proid") String proid){
+        JSONArray images = BankImageUtils.getImages(proid);
+        if (images != null) {
+            return CommonResult.success(images);
+        }
+        return CommonResult.failed();
+    }
 
     @ApiOperation("创建商品")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
